@@ -1,0 +1,105 @@
+App.css
+
+/* General Styling */
+body {
+  font-family: 'Georgia', serif;
+  background: linear-gradient(to bottom, #e0d6a3, #87ab5a, #32705e); /* Colors inspired by peacock feather */
+  color: #372d2b; /* Deep brown for text */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* Main container styling */
+#mainbody {
+  background-color: rgba(245, 245, 220, 0.8); /* Creamy beige background */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 90%;
+  max-width: 600px;
+}
+
+/* Title Styling */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #32705e; /* Deep teal inspired by peacock */
+  text-shadow: 0 0 10px #FFFFFF, 0 0 20px #32705e;
+}
+
+/* Textarea Styling */
+textarea {
+  width: 100%;
+  height: 150px;
+  margin-bottom: 20px;
+  border: 2px solid #87ab5a; /* Soft green border */
+  border-radius: 10px;
+  padding: 5px;
+  font-size: 1rem;
+  color: #372d2b; /* Deep brown text */
+  background-color: #f5f5dc; /* Beige background */
+  resize: none;
+  outline: none;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styling */
+button {
+  background: #87ab5a; /* Soft green background */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #f5f5dc; /* Beige text */
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  background: #a8c882; /* Lighter green */
+  color: #372d2b; /* Deep brown text */
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Answer Display Styling */
+pre {
+  background-color: rgba(245, 245, 220, 0.9); /* Slightly transparent beige */
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid #87ab5a; /* Green border */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  color: #372d2b; /* Deep brown text */
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Special Krishna Elements */
+h1:before {
+  content: '\2728'; /* Sparkle symbol */
+  margin-right: 10px;
+  color: #87ab5a;
+}
+
+h1:after {
+  content: '\2728';
+  margin-left: 10px;
+  color: #87ab5a;
+}
+
+#mainbody {
+  border: 2px dashed #87ab5a; /* Dashed green border */
+  background-image: url('https://example.com/peacock-feather-pattern.png'); /* Replace with actual image link */
+  background-size: cover;
+  background-blend-mode: lighten;
+}
