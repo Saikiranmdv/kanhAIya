@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import "./App.css";
 import axios from "axios";
+import ReactMarkdown from "react-markdown"
 
 const App = () => {
   const [question, setQuestion] = useState("");
   const [answer, setanswer] = useState("");
 
   async function generateAnswer() {
+    if (!question.trim()) { // Check if the question is empty or only contains whitespace
+      setanswer("Please enter a question before generating an answer.");
+      return; 
+    }
     try {
       const apiKey = import.meta.env.VITE_API_KEY; // Use process.env for CRA
       setanswer("loading....");
@@ -51,11 +56,11 @@ const App = () => {
       </h3>
       <h4>Enter your problem below and let Shri Krishna Solve it for you...</h4>
       <textarea
-        value={question}
+        value={question} 
         onChange={(e) => setQuestion(e.target.value)}
       />
       <button onClick={generateAnswer}>Generate Answer</button>
-      <pre>{answer}</pre>
+      <ReactMarkdown>{answer}</ReactMarkdown>
     </div>
   );
 };
