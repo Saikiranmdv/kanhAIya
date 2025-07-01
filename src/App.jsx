@@ -1,20 +1,29 @@
 import React, { useState } from "react";
 import "./App.css";
 import axios from "axios";
-import ReactMarkdown from "react-markdown"
+import ReactMarkdown from "react-markdown";
 
 const App = () => {
-  const [question, setQuestion] = useState("");
-  const [answer, setanswer] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [userInput, setUserInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  async function generateAnswer() {
-    if (!question.trim()) { // Check if the question is empty or only contains whitespace
-      setanswer("Please enter a question before generating an answer.");
-      return; 
-    }
+  const sendMessage = async () => {
+    if (!userInput.trim()) return;
+
+    const userMessage = { sender: "user", text: userInput };
+    setMessages((prev) => [...prev, userMessage]);
+    setUserInput("");
+    setIsLoading(true);
+
     try {
-      const apiKey = import.meta.env.VITE_API_KEY; // Use process.env for CRA
-      setanswer("loading....");
+      const apiKey = import.meta.env.VITE_API_KEY;
+      const prompt = `You are Lord Shri Krishna, the divine guide from the Bhagavad Gita. You are in a continuous conversation with a seeker who sees you as their trusted mentor. Respond like you're in a friendly dialogue, not a one-time response. Reference verses and stories from the Gita when helpful. Ask gentle, reflective follow-up questions to keep the dialogue going. Respond to this message:
+
+"${userInput}"
+
+Maintain the tone of warmth, clarity, and timeless wisdom.`;
+
       const response = await axios({
         url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
         method: "post",
@@ -23,44 +32,54 @@ const App = () => {
             {
               parts: [
                 {
-                  text: `You are Lord Shri Krishna, the divine guide and teacher from the Bhagavad Gita. Your role is to help solve people's problems by providing wisdom inspired by the teachings of the Gita. The problem to address is as follows: ${question}.Use examples, verses, and philosophical insights to provide guidance on this issue, touching upon themes like life, purpose, duty (dharma), decision-making, relationships, and spiritual growth. Speak with compassion, clarity, and authority, just as you did in your teachings to Arjuna on the battlefield of Kurukshetra. Provide practical and actionable guidance that aligns with the timeless wisdom of the Gita.Begin your response by referencing a relevant verse or principle from the Gita, explaining its meaning, and applying it directly to the problem presented.`,
+                  text: prompt,
                 },
               ],
             },
           ],
         },
       });
-      setanswer(response.data.candidates[0].content.parts[0].text); // Correct the response structure
+
+      const krishnaReply = {
+        sender: "krishna",
+        text: response.data.candidates[0].content.parts[0].text,
+      };
+
+      setMessages((prev) => [...prev, krishnaReply]);
     } catch (error) {
-      setanswer("Error generating the answer. Please try again.");
-      console.error(error);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "krishna", text: "There was an error. Please try again." },
+      ]);
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <div id="mainbody">
-      <h1>Welcome to KanhAIya – Wisdom from Shri Krishna</h1>
-      <h3>
-        Step into a sanctuary of timeless wisdom and guidance, where every
-        solution is inspired by the profound teachings of the Bhagavad Gita. At
-        KanhAIya, we channel the divine voice of Lord Shri Krishna to address
-        life’s challenges with clarity, compassion, and purpose.Whether you’re
-        seeking advice on relationships, decision-making, spiritual growth, or
-        navigating the complexities of modern life, our platform offers
-        personalized solutions rooted in the eternal truths of dharma (duty),
-        karma (action), and self-realization.Explore the teachings of the Gita
-        brought to life through relatable examples, actionable insights, and a
-        touch of divine guidance. Let the voice of Shri Krishna illuminate your
-        path and empower you to overcome any obstacle with wisdom and
-        grace.Discover your answers. Embrace your journey.
-      </h3>
-      <h4>Enter your problem below and let Shri Krishna Solve it for you...</h4>
-      <textarea
-        value={question} 
-        onChange={(e) => setQuestion(e.target.value)}
-      />
-      <button onClick={generateAnswer}>Generate Answer</button>
-      <ReactMarkdown>{answer}</ReactMarkdown>
+    <div className="chat-container">
+      <h1 className="title">KanhAIya – Chat with Shri Krishna</h1>
+      {messages.length > 0 && (
+        <div className="chat-box">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`chat-message ${msg.sender === "user" ? "user" : "krishna"}`}
+            >
+              <ReactMarkdown>{msg.text}</ReactMarkdown>
+            </div>
+          ))}
+          {isLoading && <div className="chat-message krishna">Shri Krishna is typing...</div>}
+        </div>
+      )}
+      <div className="input-box">
+        <textarea
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          placeholder="Ask your question to Shri Krishna..."
+        />
+        <button onClick={sendMessage}>Send</button>
+      </div>
     </div>
   );
 };
