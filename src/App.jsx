@@ -1,20 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import axios from "axios";
-import ReactMarkdown from "react-markdown"
+import ChatMessage from "./components/ChatMessage.jsx";
 
 const App = () => {
-  const [question, setQuestion] = useState("");
-  const [answer, setanswer] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const chatRef = useRef(null);
+
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   async function generateAnswer() {
-    if (!question.trim()) { // Check if the question is empty or only contains whitespace
-      setanswer("Please enter a question before generating an answer.");
-      return; 
+    const question = input.trim();
+    if (!question) {
+      return;
     }
+
+    setMessages((prev) => [...prev, { role: "user", text: question }]);
+    setInput("");
+
     try {
-      const apiKey = import.meta.env.VITE_API_KEY; // Use process.env for CRA
-      setanswer("loading....");
+      const apiKey = import.meta.env.VITE_API_KEY;
+      setMessages((prev) => [...prev, { role: "assistant", text: "loading..." }]);
+
       const response = await axios({
         url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
         method: "post",
@@ -30,9 +42,13 @@ const App = () => {
           ],
         },
       });
-      setanswer(response.data.candidates[0].content.parts[0].text); // Correct the response structure
+      const answerText = response.data.candidates[0].content.parts[0].text;
+      setMessages((prev) => [...prev.slice(0, -1), { role: "assistant", text: answerText }]);
     } catch (error) {
-      setanswer("Error generating the answer. Please try again.");
+      setMessages((prev) => [
+        ...prev.slice(0, -1),
+        { role: "assistant", text: "Error generating the answer. Please try again." },
+      ]);
       console.error(error);
     }
   }
@@ -54,13 +70,25 @@ const App = () => {
         path and empower you to overcome any obstacle with wisdom and
         grace.Discover your answers. Embrace your journey.
       </h3>
-      <h4>Enter your problem below and let Shri Krishna Solve it for you...</h4>
-      <textarea
-        value={question} 
-        onChange={(e) => setQuestion(e.target.value)}
-      />
-      <button onClick={generateAnswer}>Generate Answer</button>
-      <ReactMarkdown>{answer}</ReactMarkdown>
+      <h4>Enter your problem below and let Shri Krishna solve it for you...</h4>
+      <div className="chat-container" ref={chatRef}>
+        {messages.map((m, i) => (
+          <ChatMessage key={i} role={m.role} text={m.text} />
+        ))}
+      </div>
+      <div className="input-area">
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              generateAnswer();
+            }
+          }}
+        />
+        <button onClick={generateAnswer}>Send</button>
+      </div>
     </div>
   );
 };
