@@ -26,6 +26,15 @@ body {
   align-items: center;
 }
 
+.logo {
+  width: 120px;
+  height: auto;
+  display: block;
+  margin: 0 auto 1.5rem;
+  filter: drop-shadow(0 0 8px #88ffcc44);
+}
+
+
 .welcome-screen {
   text-align: center;
   flex-grow: 1;
