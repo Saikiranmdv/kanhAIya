@@ -57,9 +57,22 @@ Maintain the tone of warmth, clarity, and timeless wisdom.`;
   };
 
   return (
-    <div className="chat-container">
-      <h1 className="title">KanhAIya – Chat with Shri Krishna</h1>
-      {messages.length > 0 && (
+  <div className={`chat-wrapper ${messages.length === 0 ? "centered" : ""}`}>
+    {messages.length === 0 ? (
+      <div className="welcome-screen">
+        <img src="./assets/kanhAIya_Logo.jpg" />
+        <h1 className="welcome-title">How can I help you Dear one</h1>
+        <div className="input-box">
+          <textarea
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder="Ask your question to Shri Krishna..."
+          />
+          <button onClick={sendMessage}>Send</button>
+        </div>
+      </div>
+    ) : (
+      <>
         <div className="chat-box">
           {messages.map((msg, index) => (
             <div
@@ -69,19 +82,23 @@ Maintain the tone of warmth, clarity, and timeless wisdom.`;
               <ReactMarkdown>{msg.text}</ReactMarkdown>
             </div>
           ))}
-          {isLoading && <div className="chat-message krishna">Shri Krishna is typing...</div>}
+          {isLoading && (
+            <div className="chat-message krishna">Shri Krishna is typing...</div>
+          )}
         </div>
-      )}
-      <div className="input-box">
-        <textarea
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Ask your question to Shri Krishna..."
-        />
-        <button onClick={sendMessage}>Send</button>
-      </div>
-    </div>
-  );
+        <div className="input-box">
+          <textarea
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder="Ask your question to Shri Krishna..."
+          />
+          <button onClick={sendMessage}>Send</button>
+        </div>
+      </>
+    )}
+  </div>
+);
+
 };
 
 export default App;
