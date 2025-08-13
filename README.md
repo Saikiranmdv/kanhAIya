@@ -74,6 +74,11 @@ npm run dev
 
 ---
 
+## 🌐 Live Demo
+
+You can try the app here: [KanhAIya Live](https://your-live-project-link.com)
+
+---
 
 ## 🙏 Credits
 
