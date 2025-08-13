@@ -76,7 +76,7 @@ npm run dev
 
 ## 🌐 Live Demo
 
-You can try the app here: [KanhAIya Live](https://your-live-project-link.com)
+You can try the app here: [KanhAIya Live](https://kanh-ai-ya.vercel.app/)
 
 ---
 
