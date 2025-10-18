@@ -25,7 +25,7 @@ const App = () => {
 Maintain the tone of warmth, clarity, and timeless wisdom.`;
 
       const response = await axios({
-        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
+        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
         method: "post",
         data: {
           contents: [
@@ -51,17 +51,19 @@ Maintain the tone of warmth, clarity, and timeless wisdom.`;
         ...prev,
         { sender: "krishna", text: "There was an error. Please try again." },
       ]);
+      {console.log("Failing here")}
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
+  <>
     <div className={`chat-wrapper ${messages.length === 0 ? "centered" : ""}`}>
       {messages.length === 0 ? (
         <div className="welcome-screen">
           <img src="/kanhAIya_Logo.jpg" alt="Kanhaiya Logo" className="logo" />
-          <h1 className="welcome-title">How can I help you Dear one</h1>
+          <h1 className="welcome-title">How can I help you Arjuna?</h1>
 
           <div className="input-box">
             <textarea
@@ -102,7 +104,7 @@ Maintain the tone of warmth, clarity, and timeless wisdom.`;
         </>
       )}
     </div>
-  );
+  </>);
 };
 
 export default App;
